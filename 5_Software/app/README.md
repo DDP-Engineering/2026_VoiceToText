@@ -4,20 +4,29 @@ This software is licensed under the GNU Affero General Public License v3.0
 (AGPL-3.0) with additional Non-Commercial restriction.
 See the LICENSE and LICENSE_NC.txt files for full license details.
 -->
-# VoiceToText App (MVP)
+# VoiceToText App
 
-Offline push-to-talk desktop app using local Whisper.
+VoiceToText is an offline desktop speech workflow application built around local Whisper transcription, optional local translation, and direct text insertion into the active application.
 
-## Features (MVP)
+## Overview
 
-- Hold a hotkey to record microphone input
-- Select recording mode: hold-to-talk or toggle-to-talk
-- Convert speech to text locally (Whisper)
-- Optional translation target selection
-- Paste text into the currently active window (VS Code and others)
-- Visual capture overlay for recording/processing/error states
-- Queued transcription: multiple rapid recordings are processed sequentially
-- Optional silence filtering (VAD-style trimming)
+- push-to-talk microphone capture
+- `hold` and `toggle` recording modes
+- local Whisper speech-to-text
+- optional translation to English through Whisper
+- optional offline translation to other languages through local Argos Translate packages
+- paste/insert into the active window
+- optional clipboard restoration after paste
+- recording/processing/error overlay
+- queued transcription flow for rapid consecutive captures
+- silence trimming and speech filtering
+- tray mode with start, stop, settings, config, and logs actions
+
+## Package Information
+
+- Package name: `voice-to-text`
+- Current version: `2.2.1`
+- Python requirement: `>=3.10`
 
 ## Setup
 
@@ -97,14 +106,17 @@ Optional offline translation (requires Argos packages installed locally):
 pip install -e .[translate]
 ```
 
-Argos language packages are only required when `target_language` is non-empty and not `en`.
-You can install them using the setup scripts (examples above) or manually with Argos tooling.
-`ffmpeg` is optional for normal VoiceToText microphone workflow (recorded WAV is handled directly).
-Keep `ffmpeg` installed only if you plan to process additional external audio formats.
+Argos language packages are required only when `target_language` is non-empty and not `en`.
+You can install them using the setup scripts or manually with Argos tooling.
+
+`ffmpeg` is recommended when processing external audio formats. Standard microphone workflow records WAV directly and can run without `ffmpeg`.
 
 ## Run
 
+Standard mode:
+
 ```bash
+cd 5_Software/app
 voice-to-text
 ```
 
@@ -113,6 +125,7 @@ Exit with `Esc`.
 Tray mode (Windows/Ubuntu):
 
 ```bash
+cd 5_Software/app
 voice-to-text --tray
 ```
 
@@ -122,6 +135,7 @@ Tray menu actions:
 - Stop
 - Settings...
 - Open Config
+- Open Logs
 - Exit
 
 In tray mode, `Esc` does not terminate the app process. Use tray `Stop` or `Exit`.
@@ -158,7 +172,14 @@ Portable artifact:
 - Non-default single model: `dist/VoiceToText_Windows_Portable_v<version>_<model>.zip`
 - Multi-model build: one ZIP per model (same `<model>` suffix pattern)
 
-## Config
+The portable package bundles:
+
+- the app executable
+- runtime dependencies
+- `ffmpeg.exe` and `ffprobe.exe`
+- a pre-downloaded Whisper model
+
+## Configuration
 
 Default config file path:
 
@@ -173,19 +194,19 @@ In interactive terminal mode, a small first-run wizard asks for:
 - push-to-talk hotkey
 - beep on/off
 
-In tray mode (or non-interactive runs), defaults are written automatically without prompts.
+In tray mode or non-interactive runs, defaults are written automatically without prompts.
 
 Example:
 
 ```yaml
 push_to_talk_key: ctrl_r
+record_mode: hold
 model_size: base
 source_language: en
 target_language: "en"
 sample_rate: 16000
 channels: 1
 max_record_seconds: 120
-record_mode: hold
 enable_beep: true
 beep_start_frequency_hz: 880
 beep_start_duration_ms: 70
@@ -238,3 +259,23 @@ Notes:
 - `max_recordings_age_days` (when `> 0`) deletes recordings older than N days.
 - Cleanup priority is: `max_recordings` first, then `max_recordings_age_days`.
 - Logs are written to terminal and rotating date-based files in `logs_dir` (default daily rotation).
+
+## Testing
+
+The test suite is under `tests/` and currently covers:
+
+- application runtime behavior
+- configuration loading
+- first-run flow
+- overlay logic
+- paste logic
+- settings launcher and settings UI helpers
+- STT option handling
+- tray lifecycle guards
+- VAD helpers
+
+Run from `5_Software/app`:
+
+```bash
+python -m pytest
+```

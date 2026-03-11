@@ -105,6 +105,7 @@ Artifact:
 
 - `dist/VoiceToText_Windows_Portable.zip`
 
+
 ## Argos Notes
 
 - Argos packages are needed only for non-English targets (`target_language` not empty and not `en`).
