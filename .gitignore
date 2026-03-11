@@ -1,0 +1,80 @@
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python tooling caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.tox/
+.nox/
+.pyre/
+.hypothesis/
+.coverage
+.coverage.*
+htmlcov/
+
+# Build and packaging artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+wheels/
+release/
+artifacts/
+
+# Installer/package outputs
+*.AppImage
+*.deb
+*.rpm
+*.msi
+7_Delivery/*.zip
+
+# Logs and temporary files
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.code-workspace
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Environment and local config
+.env
+.env.*
+!.env.example
+
+# Local model/cache/artifact folders (offline STT)
+models/
+model_cache/
+whisper_models/
+faster_whisper_models/
+huggingface_cache/
+recordings/
+captures/
+
+# Repository-specific local tools/build outputs
+tools/
+5_Software/projects/**/build/
+
+# VoiceToText portable build artifacts (keep final ZIP)
+5_Software/app/build_portable/
+5_Software/app/dist/_portable_test/
+!5_Software/app/dist/
+5_Software/app/dist/*
+!5_Software/app/dist/VoiceToText_Windows_Portable*.zip

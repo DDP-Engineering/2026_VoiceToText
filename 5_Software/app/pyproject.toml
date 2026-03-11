@@ -1,0 +1,39 @@
+# Copyright (c) 2026 DDP Engineering
+# This software is licensed under the GNU Affero General Public License v3.0
+# (AGPL-3.0) with additional Non-Commercial restriction.
+# See the LICENSE and LICENSE_NC.txt files for full license details.
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "voice-to-text"
+version = "2.2.1"
+description = "Offline push-to-talk speech-to-text with local Whisper and paste-to-active-window"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "DDP Engineering" }]
+dependencies = [
+  "numpy>=1.26",
+  "openai-whisper>=20231117",
+  "pynput>=1.7.7",
+  "pyperclip>=1.9.0",
+  "pystray>=0.19.5",
+  "Pillow>=10.0.0",
+  "PyYAML>=6.0.2",
+  "sounddevice>=0.4.7",
+  "soundfile>=0.12.1"
+]
+
+[project.optional-dependencies]
+translate = ["argostranslate>=1.9.6"]
+dev = ["pytest>=8.2"]
+
+[project.scripts]
+voice-to-text = "voice_to_text.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
